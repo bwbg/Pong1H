@@ -23,10 +23,59 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ----------------------------------------------------------------------
+import collections
+import math
 import random
 import pyglet
 from pyglet.window import key
 
+
+# ----------------------------------------------------------------------
+# Essential math
+# ----------------------------------------------------------------------
+
+class Vector(collections.namedtuple('Vector', 'x y')):
+    """A simple two-dimensional vector."""
+    
+    def __new__(cls, x, y):
+        return tuple.__new__(cls, [x, y])
+
+    
+    @property
+    def magnitude(self):
+        """Returns the vector's magnitude."""
+        return math.sqrt(self.x ** 2 + self.y ** 2)
+       
+        
+    def normalized(self):
+        """Returns a normalized vector."""
+        return self / self.magnitude
+        
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    # Arithmetic operations
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+    def __add__(self, other):
+        x, y = other
+        return type(self)(self.x + x, self.y + y)
+        
+    
+    def __sub__(self, other):
+        x, y = other
+        return type(self)(self.x - x, self.y - y)
+
+        
+    def __mul__(self, scalar):
+        return type(self)(self.x * scalar, self.y * scalar)
+        
+        
+    def __truediv__(self, scalar):
+        return type(self)(self.x / scalar, self.y / scalar)
+
+
+# ----------------------------------------------------------------------
+# Other things
+# ----------------------------------------------------------------------
 
 class GameContext(pyglet.window.Window):
     def __init__(self):
